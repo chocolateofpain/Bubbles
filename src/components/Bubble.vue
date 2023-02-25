@@ -10,14 +10,12 @@
       height: `${randomSize}px`,
       width: `${randomSize}px`,
       animation: `bubble ${randomAnimationDuration}s ease-in infinite`,
-      '--bam': `${shadowSize}px`,
     }"
   >
   </a>
 </template>
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useElementVisibility } from '@vueuse/core'
+import { ref } from 'vue'
 import { links } from '../constants';
 
 defineProps<{
@@ -25,8 +23,6 @@ defineProps<{
   randomAnimationDuration: Number,
   link: string
 }>()
-
-const bubbleIsVisible = ref(false)
 
 function getRandomProperty (obj: { [key: string]: string}): string {
   const keys = Object.keys(obj)
@@ -37,32 +33,6 @@ function getRandomProperty (obj: { [key: string]: string}): string {
 const randomLink = links[Math.floor(links.length * Math.random())]
 
 const target = ref(null)
-
-const rectPosition = computed(() => target.value?.getBoundingClientRect())
-
-const testBounding = () => {
-    if (!window)
-      return
-
-    const document = window.document
-    const el = target
-    if (!target.value) {
-      bubbleIsVisible.value = false
-    }
-    else {
-      const rect = target.value.getBoundingClientRect()
-      bubbleIsVisible.value = (
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight)
-          && rect.left <= (window.innerWidth || document.documentElement.clientWidth)
-          && rect.bottom >= 0
-          && rect.right >= 0
-      )
-    }
-  }
-
- // watch(rectPosition, (newValue) => console.log(newValue))
-
-
 
 const backgroundColor = {
   AMBER: 'bg-amber-400',
@@ -81,13 +51,11 @@ const backgroundColor = {
 const randomXPosition = Math.random() * 100
 
 const randomSize = Math.floor(Math.random() * 220 + 80)
-const shadowSize = randomSize / 4
 
 const randomBgColor = getRandomProperty(backgroundColor)
 </script>
 <style>
 .bub {
-  --boom: var(--bam);
   box-shadow: inset 5px -5px 10px white;
   backdrop-filter: blur(2px);
   position: absolute;

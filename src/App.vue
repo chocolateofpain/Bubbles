@@ -53,16 +53,13 @@ onMounted(() => {
 
 
 function addNewBubble (id = null) {
-  console.log(bubbles.value)
   const randomAnimationDuration = Math.floor(Math.random() * 4 + 2)
   const newId = crypto.randomUUID()
   bubbles.value.push({ id: newId , randomAnimationDuration })
 
   if (id) {
-    console.log('bubble removed')
     bubbles.value = bubbles.value.filter(bubble => bubble.id !== id)
   } else {
-    console.log('beep')
     bubbles.value.shift()
   }
 
