@@ -1,13 +1,14 @@
 <template>
   <div
     class="rounded-full bub"
-    :class="randomBgColor"
+    :class="[randomBgColor]"
     ref="target"
     :style="{ 
       left: `${randomXPosition}%`,
       height: `${randomSize}px`,
       width: `${randomSize}px`,
       animation: `bubble ${randomAnimationDuration}s ease-in infinite`,
+      '--bam': `${shadowSize}px`,
     }"
   />
 </template>
@@ -17,6 +18,7 @@ import { useElementVisibility } from '@vueuse/core'
 
 defineProps({
   size: Number,
+  randomAnimationDuration: Number,
 })
 
 const bubbleIsVisible = ref(false)
@@ -51,7 +53,7 @@ const testBounding = () => {
     }
   }
 
- //  watch(rectPosition, (newValue) => console.log(newValue))
+ // watch(rectPosition, (newValue) => console.log(newValue))
 
 
 
@@ -72,13 +74,13 @@ const backgroundColor = {
 const randomXPosition = Math.random() * 100
 
 const randomSize = Math.floor(Math.random() * 220 + 80)
-
-const randomAnimationDuration = Math.floor(Math.random() * 4 + 2)
+const shadowSize = randomSize / 4
 
 const randomBgColor = getRandomProperty(backgroundColor)
 </script>
 <style>
 .bub {
+  --boom: var(--bam);
   box-shadow: inset 5px -5px 10px white;
   backdrop-filter: blur(2px);
   position: absolute;
@@ -90,11 +92,11 @@ const randomBgColor = getRandomProperty(backgroundColor)
   position: absolute;
   content: "";
   background-color: white;
-  width: 20px;
-  height: 20px;
+  width: 10%;
+  height: 10%;
   border-radius: 50%;
-  top: 25px;
-  right: 23px;
+  top: 20%;
+  right: 20%;
   box-shadow: 0px 0px 20px white;
 }
 

@@ -1,11 +1,12 @@
 <template>
   <div class="relative bg-[#fff3af] h-screen" id="observer-root">
-    <Bubble :size="500" class="observable" v-for="bubble in bubbles" :key="bubble.id"/>
-    <!-- <Bubble :size="500" class="observable"/>
-    <Bubble :size="500" class="observable"/>
-    <Bubble :size="500" class="observable"/>
-    <Bubble :size="500" class="observable"/>
-    <Bubble :size="500" class="observable"/> -->
+    <Bubble 
+      :size="500" 
+      class="observable" 
+      v-for="bubble in bubbles" 
+      :key="bubble.id"
+      :randomAnimationDuration="bubble.randomAnimationDuration"
+    />
   </div>
 </template>
 
@@ -13,10 +14,14 @@
 import { onMounted, ref } from 'vue';
 import Bubble from './components/Bubble.vue';
 
-const myKey = ref('beep')
+const NUMBER_OF_BUBBLES = 10
 
-const bubbleCount = ref(1)
-const bubbles = ref([{ id: bubbleCount.value }])
+const bubbles = ref(Array.from(
+  { length: NUMBER_OF_BUBBLES },
+  () => {
+    return { id: crypto.randomUUID(), randomAnimationDuration: Math.floor(Math.random() * 4 + 2) }
+  }
+))
 
 const callback = (entries: IntersectionObserverEntry[]) => {  
   entries.forEach(({ target, isIntersecting }: IntersectionObserverEntry)=> {
@@ -36,14 +41,26 @@ onMounted(() => {
   .querySelectorAll(".observable")
   .forEach((el) => observer.observe(el));
 
-  setInterval(function() {
-    bubbleCount.value += 1
-    // bubbles.value = Array.apply(null, Array(bubbleCount.value)).map((e, i) => {
-    //   return { id: i }
-    // })
-    bubbles.value.shift()
-  }, 1000);
+  addNewBubble()
 })
+
+
+function addNewBubble (id = null) {
+  const randomAnimationDuration = Math.floor(Math.random() * 4 + 2)
+  const newId = crypto.randomUUID()
+  bubbles.value.push({ id: newId , randomAnimationDuration })
+
+  if (id) {
+    console.log(id)
+    bubbles.value.filter(bubble => bubble.id !== id)
+  } else {
+    console.log('beep')
+    bubbles.value.shift()
+  }
+
+
+  setTimeout(addNewBubble, randomAnimationDuration * 1000, newId)
+}
 
 </script>
 
