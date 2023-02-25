@@ -1,6 +1,7 @@
 <template>
-  <div class="relative bg-[#fff3af] h-screen" id="observer-root">
+  <div class="relative bg-[#ebeae2] h-screen" id="observer-root">
     <Bubble 
+      :link="randomLink"
       :size="500" 
       class="observable" 
       v-for="bubble in bubbles" 
@@ -11,15 +12,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import Bubble from './components/Bubble.vue';
 
-const NUMBER_OF_BUBBLES = 10
+const NUMBER_OF_BUBBLES = 1
 
 const bubbles = ref(Array.from(
   { length: NUMBER_OF_BUBBLES },
   () => {
-    return { id: crypto.randomUUID(), randomAnimationDuration: Math.floor(Math.random() * 4 + 2) }
+    return { id: crypto.randomUUID(), randomAnimationDuration: Math.floor(Math.random() * 4 + 4) }
   }
 ))
 
@@ -42,17 +43,24 @@ onMounted(() => {
   .forEach((el) => observer.observe(el));
 
   addNewBubble()
+
+  setTimeout(addNewBubble, 1000)
+  setTimeout(addNewBubble, 1500)
+  setTimeout(addNewBubble, 2000)
+  setTimeout(addNewBubble, 2500)
+  setTimeout(addNewBubble, 3000)
 })
 
 
 function addNewBubble (id = null) {
+  console.log(bubbles.value)
   const randomAnimationDuration = Math.floor(Math.random() * 4 + 2)
   const newId = crypto.randomUUID()
   bubbles.value.push({ id: newId , randomAnimationDuration })
 
   if (id) {
-    console.log(id)
-    bubbles.value.filter(bubble => bubble.id !== id)
+    console.log('bubble removed')
+    bubbles.value = bubbles.value.filter(bubble => bubble.id !== id)
   } else {
     console.log('beep')
     bubbles.value.shift()
@@ -61,6 +69,8 @@ function addNewBubble (id = null) {
 
   setTimeout(addNewBubble, randomAnimationDuration * 1000, newId)
 }
+
+const randomLink = computed(() => 'https://www.window-swap.com/')
 
 </script>
 

@@ -1,5 +1,7 @@
 <template>
-  <div
+  <a
+    :href="randomLink"
+    target="_blank"
     class="rounded-full bub"
     :class="[randomBgColor]"
     ref="target"
@@ -10,16 +12,19 @@
       animation: `bubble ${randomAnimationDuration}s ease-in infinite`,
       '--bam': `${shadowSize}px`,
     }"
-  />
+  >
+  </a>
 </template>
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useElementVisibility } from '@vueuse/core'
+import { links } from '../constants';
 
-defineProps({
+defineProps<{
   size: Number,
   randomAnimationDuration: Number,
-})
+  link: string
+}>()
 
 const bubbleIsVisible = ref(false)
 
@@ -28,6 +33,8 @@ function getRandomProperty (obj: { [key: string]: string}): string {
 
   return obj[keys[Math.floor(keys.length * Math.random())]]
 }
+
+const randomLink = links[Math.floor(links.length * Math.random())]
 
 const target = ref(null)
 
