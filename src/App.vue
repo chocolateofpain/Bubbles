@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-[#ebeae2] h-screen" id="observer-root">
+  <div class="relative bg-[#ffffff] h-screen" id="observer-root">
     <Bubble 
       :link="randomLink"
       :size="500" 
@@ -17,12 +17,7 @@ import Bubble from './components/Bubble.vue';
 
 const NUMBER_OF_BUBBLES = 1
 
-const bubbles = ref(Array.from(
-  { length: NUMBER_OF_BUBBLES },
-  () => {
-    return { id: crypto.randomUUID(), randomAnimationDuration: Math.floor(Math.random() * 4 + 4) }
-  }
-))
+const bubbles = ref([])
 
 const callback = (entries: IntersectionObserverEntry[]) => {  
   entries.forEach(({ target, isIntersecting }: IntersectionObserverEntry)=> {
@@ -43,7 +38,7 @@ onMounted(() => {
   .forEach((el) => observer.observe(el));
 
   addNewBubble()
-
+  setTimeout(addNewBubble, 500)
   setTimeout(addNewBubble, 1000)
   setTimeout(addNewBubble, 1500)
   setTimeout(addNewBubble, 2000)

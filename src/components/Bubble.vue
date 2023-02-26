@@ -10,6 +10,7 @@
       height: `${randomSize}px`,
       width: `${randomSize}px`,
       animation: `bubble ${randomAnimationDuration}s ease-in infinite`,
+      '--size': `-${randomSize}px`
     }"
   >
   </a>
@@ -59,7 +60,7 @@ const randomBgColor = getRandomProperty(backgroundColor)
   box-shadow: inset 5px -5px 10px white;
   backdrop-filter: blur(2px);
   position: absolute;
-  bottom: -300px;
+  bottom: var(--size);
   /* animation: bubble 3s ease-in infinite; */
   /* animation: bubble2 2s ease-in 1s infinite; */
 }
