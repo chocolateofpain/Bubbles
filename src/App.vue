@@ -20,7 +20,7 @@ type Bubbles = {
   randomAnimationDuration: number
 }
 
-const bubbles = ref<Bubbles[] | []>([])
+const bubbles = ref<(Bubbles | null)[]>([])
 
 const callback = (entries: IntersectionObserverEntry[]) => {  
   entries.forEach(({ target, isIntersecting }: IntersectionObserverEntry)=> {
@@ -56,7 +56,7 @@ function addNewBubble (id = null) {
   bubbles.value.push({ id: newId , randomAnimationDuration })
 
   if (id) {
-    bubbles.value = bubbles.value.filter(bubble => bubble.id !== id)
+    bubbles.value = bubbles.value.filter(bubble => bubble?.id !== id)
   } else {
     bubbles.value.shift()
   }
