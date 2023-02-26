@@ -15,9 +15,12 @@
 import { onMounted, ref, computed } from 'vue';
 import Bubble from './components/Bubble.vue';
 
-const NUMBER_OF_BUBBLES = 1
+type Bubbles = {
+  id: string, 
+  randomAnimationDuration: number
+}
 
-const bubbles = ref([])
+const bubbles = ref<Bubbles[] | []>([])
 
 const callback = (entries: IntersectionObserverEntry[]) => {  
   entries.forEach(({ target, isIntersecting }: IntersectionObserverEntry)=> {
