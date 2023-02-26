@@ -5,8 +5,8 @@
       :size="500" 
       class="observable" 
       v-for="bubble in bubbles" 
-      :key="bubble.id"
-      :randomAnimationDuration="bubble.randomAnimationDuration"
+      :key="bubble!.id"
+      :randomAnimationDuration="bubble!.randomAnimationDuration"
     />
   </div>
 </template>
@@ -56,7 +56,7 @@ function addNewBubble (id = null) {
   bubbles.value.push({ id: newId , randomAnimationDuration })
 
   if (id) {
-    bubbles.value = bubbles.value.filter(bubble => bubble?.id !== id)
+    bubbles.value = bubbles.value.filter(bubble => bubble!.id !== id)
   } else {
     bubbles.value.shift()
   }
