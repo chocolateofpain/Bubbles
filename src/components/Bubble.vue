@@ -42,8 +42,9 @@ function getRandomInt(min: number, max: number) {
 
 onMounted(() => {
 
-  addEventListener("animationiteration", (event) => {
-    updateBubble(event.target?.id)
+  addEventListener("animationiteration", (event: AnimationEvent ) => {
+    const target = event.target as HTMLAnchorElement
+    if (target) updateBubble(target.id as string )
   });
 })
 
