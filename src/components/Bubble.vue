@@ -1,59 +1,73 @@
 <template>
   <a
-    :href="randomLink"
+    :id="id"
+    :href="link"
     target="_blank"
-    class="rounded-full bub"
-    :class="[randomBgColor]"
     ref="target"
+    class="rounded-full bub"
     :style="{ 
       left: `${randomXPosition}%`,
-      height: `${randomSize}px`,
-      width: `${randomSize}px`,
+      height: `${size}px`,
+      width: `${size}px`,
       animation: `bubble ${randomAnimationDuration}s ease-in infinite`,
-      '--size': `-${randomSize}px`
+      '--size': `-${size}px`,
+      'animation-play-state': isHovered ? 'paused' : '',
+      'background-color': `${bgColor}`,
     }"
   >
   </a>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-import { links } from '../constants';
+import { onMounted, ref } from 'vue'
+import {
+  getRandomLink,
+  getRandomXPosition,
+  getRandomSize,
 
-defineProps<{
-  size: Number,
-  randomAnimationDuration: Number,
-  link: string
-}>()
+} from '../helpers'
+import { useElementHover } from '@vueuse/core'
+import { backgroundColor } from '../constants';
 
-function getRandomProperty (obj: { [key: string]: string}): string {
-  const keys = Object.keys(obj)
+const props = defineProps({
+  id: String
+})
 
-  return obj[keys[Math.floor(keys.length * Math.random())]]
+const target = ref()
+
+function getRandomInt(min: number, max: number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const randomLink = links[Math.floor(links.length * Math.random())]
+onMounted(() => {
 
-const target = ref(null)
+  addEventListener("animationiteration", (event) => {
+    updateBubble(event.target?.id)
+  });
+})
 
-const backgroundColor = {
-  AMBER: 'bg-amber-400',
-  ORANGE: 'bg-orange-400',
-  YELLOW: 'bg-yellow-400',
-  TEAL: 'bg-teal-400',
-  EMERALD: 'bg-emerald-400',
-  GREEN: 'bg-green-400',
-  CYAN: 'bg-cyan-400',
-  SKY: 'bg-sky-400',
-  BLUE: 'bg-blue-400',
-  INDIGO: 'bg-indigo-400',
-  VIOLET: 'bg-violet-400'
+function updateBubble (eventId: string) {
+  if (eventId === props.id) {
+    link.value = getRandomLink()
+    randomXPosition.value = getRandomXPosition()
+    size.value = getRandomSize()
+    bgColor.value = backgroundColor[Math.floor(Math.random() * backgroundColor.length)]
+  }
 }
 
-const randomXPosition = Math.random() * 100
+const randomAnimationDuration = ref(Math.floor(Math.random() * 4 + 4))
 
-const randomSize = Math.floor(Math.random() * 220 + 80)
+const isHovered = useElementHover(target)
 
-const randomBgColor = getRandomProperty(backgroundColor)
+const link = ref(getRandomLink())
+
+const randomXPosition = ref(getRandomXPosition())
+
+const size = ref(getRandomSize())
+
+const bgColor = ref(backgroundColor[Math.floor(Math.random() * backgroundColor.length)])
+
 </script>
 <style>
 .bub {
@@ -61,8 +75,6 @@ const randomBgColor = getRandomProperty(backgroundColor)
   backdrop-filter: blur(2px);
   position: absolute;
   bottom: var(--size);
-  /* animation: bubble 3s ease-in infinite; */
-  /* animation: bubble2 2s ease-in 1s infinite; */
 }
 .bub::before {
   position: absolute;
@@ -78,16 +90,10 @@ const randomBgColor = getRandomProperty(backgroundColor)
 
 @keyframes bubble {
   0% {
-    opacity: 0;
-  }
-  10%,
-  93% {
     opacity: 1;
   }
   100% {
     transform: translate(90px, -150vh);
-    display: none;
-    /* opacity: 0; */
   }
 }
 </style>

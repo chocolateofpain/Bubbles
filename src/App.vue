@@ -1,77 +1,18 @@
 <template>
-  <div class="relative bg-[#ffffff] h-screen" id="observer-root">
-    <Bubble 
-      :link="randomLink"
-      :size="500" 
-      class="observable" 
-      v-for="bubble in bubbles" 
-      :key="bubble!.id"
-      :randomAnimationDuration="bubble!.randomAnimationDuration"
-    />
+  <div class="relative bg-[#ffffff] h-screen">
+    <Bubble id="1" />
+    <Bubble id="2" />
+    <Bubble id="3" />
+    <Bubble id="4" />
+    <Bubble id="5" />
+    <Bubble id="6" />
+    <Bubble id="7" />
+    <Bubble id="8" />
+    <Bubble id="9" />
+    <Bubble id="10" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
 import Bubble from './components/Bubble.vue';
-
-type Bubbles = {
-  id: string, 
-  randomAnimationDuration: number
-}
-
-const bubbles = ref<(Bubbles | null)[]>([])
-
-const callback = (entries: IntersectionObserverEntry[]) => {  
-  entries.forEach(({ target, isIntersecting }: IntersectionObserverEntry)=> {
-  if (!isIntersecting) {
-    return target.classList.remove('in-sight');
-  } 
-    target.classList.add('in-sight');
-  })
-};
-
-onMounted(() => {
-  const observer = new IntersectionObserver(callback, {
-      root: document.getElementById("observer-root"),
-      threshold: 1.0,
-  });
-  document
-  .querySelectorAll(".observable")
-  .forEach((el) => observer.observe(el));
-
-  addNewBubble()
-  setTimeout(addNewBubble, 500)
-  setTimeout(addNewBubble, 1000)
-  setTimeout(addNewBubble, 1500)
-  setTimeout(addNewBubble, 2000)
-  setTimeout(addNewBubble, 2500)
-  setTimeout(addNewBubble, 3000)
-})
-
-
-function addNewBubble (id = null) {
-  const randomAnimationDuration = Math.floor(Math.random() * 4 + 2)
-  const newId = crypto.randomUUID()
-  bubbles.value.push({ id: newId , randomAnimationDuration })
-
-  if (id) {
-    bubbles.value = bubbles.value.filter(bubble => bubble!.id !== id)
-  } else {
-    bubbles.value.shift()
-  }
-
-
-  setTimeout(addNewBubble, randomAnimationDuration * 1000, newId)
-}
-
-const randomLink = computed(() => 'https://www.window-swap.com/')
-
 </script>
-
-<style>
-.in-sight {
-  border: 2px solid;
-  border-color: violet;
-}
-</style>
